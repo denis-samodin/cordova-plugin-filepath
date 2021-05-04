@@ -1,18 +1,17 @@
 package com.hiddentao.cordova.filepath;
 
-import android.text.TextUtils;
 import android.Manifest;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.provider.OpenableColumns;
-import android.util.Log;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.util.Log;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -20,13 +19,13 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.PermissionHelper;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
-import java.io.File;
 
 public class FilePath extends CordovaPlugin {
 
@@ -60,10 +59,10 @@ public class FilePath extends CordovaPlugin {
     /**
      * Executes the request and returns PluginResult.
      *
-     * @param action        The action to execute.
-     * @param args          JSONArry of arguments for the plugin.
+     * @param action          The action to execute.
+     * @param args            JSONArry of arguments for the plugin.
      * @param callbackContext The callback context through which to return stuff to caller.
-     * @return              A PluginResult object with a status and message.
+     * @return A PluginResult object with a status and message.
      */
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -73,14 +72,12 @@ public class FilePath extends CordovaPlugin {
         if (action.equals("resolveNativePath")) {
             if (PermissionHelper.hasPermission(this, READ)) {
                 resolveNativePath();
-            }
-            else {
+            } else {
                 getReadPermission(READ_REQ_CODE);
             }
 
             return true;
-        }
-        else {
+        } else {
             JSONObject resultObj = new JSONObject();
 
             resultObj.put("code", INVALID_ACTION_ERROR_CODE);
@@ -108,14 +105,12 @@ public class FilePath extends CordovaPlugin {
             resultObj.put("message", "Unable to resolve filesystem path.");
 
             this.callback.error(resultObj);
-        }
-        else if (filePath.equals(GET_CLOUD_PATH_ERROR_ID)) {
+        } else if (filePath.equals(GET_CLOUD_PATH_ERROR_ID)) {
             resultObj.put("code", GET_CLOUD_PATH_ERROR_CODE);
             resultObj.put("message", "Files from cloud cannot be resolved to filesystem, download is required.");
 
             this.callback.error(resultObj);
-        }
-        else {
+        } else {
             Log.d(TAG, "Filepath: " + filePath);
 
             this.callback.success("file://" + filePath);
@@ -194,9 +189,9 @@ public class FilePath extends CordovaPlugin {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
@@ -310,7 +305,7 @@ public class FilePath extends CordovaPlugin {
      * represents a local file.
      *
      * @param context The context.
-     * @param uri The Uri to query.
+     * @param uri     The Uri to query.
      */
     private static String getPath(final Context context, final Uri uri) {
 
@@ -337,8 +332,7 @@ public class FilePath extends CordovaPlugin {
                 String fullPath = getPathFromExtSD(split);
                 if (fullPath != "") {
                     return fullPath;
-                }
-                else {
+                } else {
                     return null;
                 }
             }
