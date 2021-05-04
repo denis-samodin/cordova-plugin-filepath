@@ -198,6 +198,9 @@ public class FilePath extends CordovaPlugin {
     private static String getDataColumn(Context context, Uri uri, String selection,
                                         String[] selectionArgs) {
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return uri.toString();
+        }
         Cursor cursor = null;
         final String column = "_data";
         final String[] projection = {
